@@ -30,11 +30,11 @@ public class Server {
 
                     String url = getUrlRequest(in);
                     if (url.equals("GET")) {
-                        String showDirectory = sendRequest(recursionFiles.recursionDirectory(dir));
+                        String showDirectory = sendGoodRequest(recursionFiles.recursionDirectory(dir));
                         out.println(showDirectory);
                         out.flush();
                     } else {
-                        String error = sendRequest(NOT_FOUND);
+                        String error = sendRequestError(NOT_FOUND);
                         out.println(error);
                         out.flush();
                     }
@@ -63,7 +63,7 @@ public class Server {
      * @param response параметр типа String - указывается что именно нужно передать для ответа на запрос
      * @return возвращает строку с описанием http ответа и параметром текста для ответа
      */
-    public String sendRequest(String response) {
+    private String sendRequestError(String response) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("HTTP/1.1 404 Not Found\n");
         stringBuilder.append("Content-Type: text/html; charset=utf-8\n\n");
@@ -71,5 +71,11 @@ public class Server {
         return new String(stringBuilder);
     }
 
+    private String sendGoodRequest(String response) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("HTTP/1.1 200 OK\n");
+        stringBuilder.append("Content-Type: text/html; charset=utf-8\n\n");
+        stringBuilder.append(response);
+        return new String(stringBuilder);
+    }
 }
-//
